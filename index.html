@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Dice Roller demo</title>
+
+  <meta name="author" content="GreenImp Web - greenimp.co.uk">
+
+  <style>
+    *{
+      box-sizing: border-box;
+    }
+
+    html{
+      height: 100%;
+    }
+
+    body{
+      display: flex;
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      color: #1e1e1e;
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 16px;
+      background-color: #fff;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    code{
+      padding: 0 .25em;
+      color: #444;
+      font-size: .75em;
+      background: #eee;
+    }
+
+    input, textarea, button{
+      margin-bottom: 1em;
+      border-radius: 4px;
+    }
+
+    input, textarea{
+      padding: .5em;
+      background: #eee;
+      border: 1px solid #aaa;
+    }
+
+    button{
+      padding: .5rem 1.5rem;
+      color: #ffffff;
+      background-color: #1e1e1e;
+      border: none;
+      border-radius: 0;
+      cursor: pointer;
+    }
+
+    button:hover,
+    button:focus{
+      background: #111;
+    }
+
+    a{
+      color: #5E6448;
+    }
+
+    a:hover,
+    a:focus{
+      color: #7C8061;
+    }
+
+
+    #header{
+      padding: 1rem;
+      color: #1e1e1e;
+      background: #30fcf1;
+    }
+
+    #header h1{
+      margin: 0;
+    }
+
+    #footer{
+      padding: 1rem;
+      color: #dfdfdf;
+      font-size: .75em;
+      background: #8B664F;
+    }
+
+    #footer a{
+      color: #fff;
+    }
+
+    #footer a:hover,
+    #footer a:focus{
+      color: #B8B283;
+    }
+
+    #main{
+      padding: 1rem;
+    }
+
+
+    #output{
+      width: 100%;
+      max-width: 100%;
+      min-width: 100%;
+      font-family: monospace;
+      font-size: 1em;
+    }
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/rpg-dice-roller@4.0.2/lib/umd/bundle.min.js"></script>
+  <script type="module">
+    const diceRoller = new window.rpgDiceRoller.DiceRoller();
+
+    window.roll = () => {
+      
+      // Clear text areas
+      document.getElementById('d4Output').value = null;
+      document.getElementById('d6Output').value = null;
+      document.getElementById('d8Output').value = null;
+      document.getElementById('d10Output').value = null;
+      document.getElementById('d20Output').value = null;
+      document.getElementById('output').value = null;
+
+      // Initialize the results dictionary 
+      var results = {};
+
+      // Compute d4 result if selected
+      var doRolld4 = document.getElementById('doRolld4').checked;
+      if (doRolld4) {
+        var diceResult = diceRoller.roll('1d4').total;
+        results['d4'] = diceResult;
+        document.getElementById('d4Output').value = diceResult;
+      }
+
+      // Compute d6 result if selected
+      var doRolld6 = document.getElementById('doRolld6').checked;
+      if (doRolld6) {
+        var diceResult = diceRoller.roll('1d6').total;
+        results['d6'] = diceResult;
+        document.getElementById('d6Output').value = diceResult;
+      }
+
+      // Compute d8 result if selected
+      var doRolld8 = document.getElementById('doRolld8').checked;
+      if (doRolld8) {
+        var diceResult = diceRoller.roll('1d8').total;
+        results['d8'] = diceResult;
+        document.getElementById('d8Output').value = diceResult;
+      }
+
+      // Compute d10 result if selected
+      var doRolld10 = document.getElementById('doRolld10').checked;
+      if (doRolld10) {
+        var diceResult = diceRoller.roll('1d10').total;
+        results['d10'] = diceResult;
+        document.getElementById('d10Output').value = diceResult;
+      }
+
+      // Compute d20 result if selected
+      var doRolld20 = document.getElementById('doRolld20').checked;
+      if (doRolld20) {
+        var diceResult = diceRoller.roll('1d20').total;
+        results['d20'] = diceResult;
+        document.getElementById('d20Output').value = diceResult;
+      }
+
+      if (Object.keys(results).length === 0) {
+        document.getElementById('output').value = null;
+        return;
+      }
+
+      if (results['d10']) {
+        document.getElementById('output').value = 10;
+        return;
+      }
+      
+      // Compute final result
+      var result = 0;
+
+      var d4Result = results['d4'];
+      if (d4Result == 1 || d4Result == 3) {
+        result += 1;
+      }
+
+      var d6Result = results['d6'];
+      if (d6Result) {
+        result += d6Result;
+      }
+
+      var d8Result = results['d8'];
+      if (d8Result) {
+        result += 5;
+      }
+
+      var d20Result = results['d20'];
+      if (d20Result) {
+        if (result != 0) {
+          result += (result - 1) * 2;
+        }
+      }
+
+      document.getElementById('output').value = result;
+    };
+  </script>
+</head>
+
+<body>
+  <header id="header">
+    <h1>Dice Game</h1>
+  </header>
+
+  <main id="main">
+    <form action="" onsubmit="roll(); return false;">
+      <!-- 4-Sided Die -->
+      <input type="checkbox" id="doRolld4"> 
+
+      </input>
+      <label for="doRolld4">4-sided Die</label>
+      <div>
+        <textarea rows="1" id="d4Output" readonly placeholder="Not rolled"></textarea>
+      </div>
+
+      <!-- 6-Sided Die -->
+      <input type="checkbox" id="doRolld6"> 
+
+      </input>
+      <label for="doRolld6">6-sided Die</label>
+      <div>
+        <textarea rows="1" id="d6Output" readonly placeholder="Not rolled"></textarea>
+      </div>
+
+      <!-- 8-Sided Die -->
+      <input type="checkbox" id="doRolld8"> 
+
+      </input>
+      <label for="doRolld8">8-sided Die</label>
+      <div>
+        <textarea rows="1" id="d8Output" readonly placeholder="Not rolled"></textarea>
+      </div>
+
+      <!-- 10-Sided Die -->
+      <input type="checkbox" id="doRolld10"> 
+
+      </input>
+      <label for="doRolld10">10-sided Die</label>
+      <div>
+        <textarea rows="1" id="d10Output" readonly placeholder="Not rolled"></textarea>
+      </div>
+
+      <!-- 20-Sided Die -->
+      <input type="checkbox" id="doRolld20"> 
+
+      </input>
+      <label for="doRolld20">20-sided Die</label>
+      <div>
+        <textarea rows="1" id="d20Output" readonly placeholder="Not rolled"></textarea>
+      </div>
+      
+      <button type="submit">Roll</button>
+    </form>
+
+    <div>
+      <label for="output">Final Result</label>
+
+      <div>
+        <textarea rows="1" id="output" readonly placeholder="No dice rolled"></textarea>
+      </div>
+
+    </div>
+</body>
+</html>
