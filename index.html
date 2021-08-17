@@ -49,22 +49,6 @@
       border: 1px solid #aaa;
     }
 
-    button{
-      padding: .5rem 1.5rem;
-      color: #ffffff;
-      background-color: #caa607;
-      width:100%;
-      height: 60px;
-      font-size: 22pt;
-      border: none;
-      border-radius: 0;
-      cursor: pointer;
-    }
-
-    button:hover{
-      background: #111;
-    }
-
     a{
       color: #5E6448;
     }
@@ -74,17 +58,31 @@
       color: #7C8061;
     }
 
-    .flex {
+    @media screen and (max-device-width:699px), screen and (max-width:699px) {
+      .flex {
+        display: block;
+      }
+    }
+
+    @media screen and (min-device-width:700px), screen and (min-width:700px) {
+      .flex {
         display: flex;
+      }
     }
 
     .flex-child {
         flex: 1;
-        padding: 1rem
-    }  
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
 
-    .flex-child:first-child {
-        margin-right: 20px;
+    .flex-child-content {
+        margin-left: 20px;
+    }
+
+    .output-flex-child {
+        padding: 0px;
+        background-color: black;
     }
 
     .invisible {
@@ -94,7 +92,9 @@
     #header{
       padding: 1rem;
       color: #1e1e1e;
-      background: #30fcf1;
+      background: #515252;
+      color: white;
+      font-family: monospace;
     }
 
     #header h1{
@@ -121,6 +121,26 @@
       padding: 0px;
     }
 
+    #roll-button {
+      padding: .5rem 1.5rem;
+      color: #ffffff;
+      background-color: #caa607;
+      width:100%;
+      height: 60px;
+      font-size: 22pt;
+      border: none;
+      border-radius: 0;
+      cursor: pointer;
+      font-family: monospace;
+    }
+
+    #roll-button:hover {
+      background: rgb(197,14,14);
+    }
+
+    #roll-button:disabled {
+      background: #515252;
+    }
 
     #output{
       background-color: black;
@@ -129,7 +149,7 @@
       max-width: 100%;
       min-width: 100%;
       font-family: monospace;
-      font-size: 50pt;
+      font-size: 35pt;
       text-align: center;
       vertical-align: middle;
       top: 40%;
@@ -212,6 +232,81 @@
       text-align: center;
       width:100%;
       display: block;
+      color: white;
+      padding: 10px;
+      font-family: monospace;
+    }
+
+    
+    @media screen and (min-device-width:700px), screen and (min-width:700px) {
+      .glowing-number {
+        background-color: #caa607;
+      }
+    }
+
+    /* The switch - the box around the slider */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 34px;
+    }
+
+    .slider-container {
+      margin-bottom: 10px;
+      margin-top: 20px;
+    }
+
+    .slider-label {
+      font-size: 20pt;
+      vertical-align: bottom;
+      font-family: monospace;
+    }
+
+    /* Hide default HTML checkbox */
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    /* The slider */
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+
+    input:checked + .slider {
+      background-color: #caa607;
+    }
+
+    input:focus + .slider {
+      box-shadow: 0 0 1px #caa607;
+    }
+
+    input:checked + .slider:before {
+      -webkit-transform: translateX(26px);
+      -ms-transform: translateX(26px);
+      transform: translateX(26px);
     }
 
   </style>
@@ -223,12 +318,21 @@
 
     window.roll = () => {
       
+      // Lock roll button
+      document.getElementById('roll-button').disabled = true;
+      document.getElementById('roll-button').innerHTML = 'Rolling...';
+
       // Clear text areas
       document.getElementById('d4Output').value = null;
+      document.getElementById('d4').innerText = '?';
       document.getElementById('d6Output').value = null;
+      document.getElementById('d6').innerText = '?';
       document.getElementById('d8Output').value = null;
+      document.getElementById('d8').innerText = '?';
       document.getElementById('d10Output').value = null;
+      document.getElementById('d10Value').innerText = '?';
       document.getElementById('d20Output').value = null;
+      document.getElementById('d20').innerText = '?';
       document.getElementById('output').innerHTML = '...';
 
       // Initialize the results dictionary 
@@ -243,7 +347,7 @@
         document.getElementById('d4').innerText = '...';
         setTimeout(function() {
           document.getElementById('d4').innerText = results['d4'];
-        }, 500);
+        }, 1234);
       }
 
       // Compute d6 result if selected
@@ -255,7 +359,7 @@
         document.getElementById('d6').innerText = '...';
         setTimeout(function() {
           document.getElementById('d6').innerText = results['d6'];
-        }, 500);
+        }, 1234);
       }
 
       // Compute d8 result if selected
@@ -267,7 +371,7 @@
         document.getElementById('d8').innerText = '...';
         setTimeout(function() {
           document.getElementById('d8').innerText = results['d8'];
-        }, 500);
+        }, 1234);
       }
 
       // Compute d10 result if selected
@@ -279,7 +383,7 @@
         document.getElementById('d10Value').innerText = '...';
         setTimeout(function() {
           document.getElementById('d10Value').innerText = results['d10'];
-        }, 500);
+        }, 1234);
       }
 
       // Compute d20 result if selected
@@ -291,17 +395,24 @@
         document.getElementById('d20').innerText = '...';
         setTimeout(function() {
           document.getElementById('d20').innerText = results['d20'];
-        }, 500);
+        }, 1234);
       }
 
+      // Set the final result 
       document.getElementById('output').innerText = 'Calculating...';
       setTimeout(function() {    
         var result = processResults(results);
         if (doRolld4 || doRolld6 || doRolld8 || doRolld10 || doRolld20) {
-          document.getElementById('output').innerText = result;  
+          document.getElementById('output').innerHTML = '<div class="glowing-number">' + result + '</div>';
+          //document.getElementById('output').innerText = result;  
         } else {
           document.getElementById('output').innerText = 'No Dice Rolled';  
         }
+        
+        // Unlock roll button
+        document.getElementById('roll-button').disabled = false;
+        document.getElementById('roll-button').innerHTML = 'Press to Roll Again !';
+
       }, 1234);
       
       
@@ -320,49 +431,71 @@
       <div class="flex">
 
         <div class="flex-child">
-          <!-- 4-Sided Die -->
-          <input type="checkbox" id="doRolld4"> 
 
-          </input>
-          <label for="doRolld4">4-sided Die</label>
-          <div class="invisible">
-            <textarea rows="1" id="d4Output" readonly placeholder="Not rolled"></textarea>
-          </div>
-          <div id="d4">
-            ?
+          <div class="flex-child-content">
+          
+            <!-- 4-Sided Die -->
+            <div class="slider-container">
+              <label class="switch">
+                <input id="doRolld4" type="checkbox"/>
+                <span class="slider"></span>
+              </label>
+              <label class="slider-label" for="doRolld4">4-sided Die</label>
+            </div>
+
+            <div class="invisible">
+              <textarea rows="1" id="d4Output" readonly placeholder="Not rolled"></textarea>
+            </div>
+            <div id="d4">
+              ?
+            </div>
+
+            <!-- 6-Sided Die -->
+            <div class="slider-container">
+              <label class="switch">
+                <input id="doRolld6" type="checkbox"/>
+                <span class="slider"></span>
+              </label>
+              <label class="slider-label" for="doRolld6">6-sided Die</label>
+            </div>
+
+            <div class="invisible">
+              <textarea rows="1" id="d6Output" readonly placeholder="Not rolled"></textarea>
+            </div>
+            <div id="d6">
+              ?
+            </div>
+
+            <!-- 8-Sided Die -->
+            <div class="slider-container">
+              <label class="switch">
+                <input id="doRolld8" type="checkbox"/>
+                <span class="slider"></span>
+              </label>
+              <label class="slider-label" for="doRolld8">8-sided Die</label>
+            </div>
+
+            <div class="invisible">
+              <textarea rows="1" id="d8Output" readonly placeholder="Not rolled"></textarea>
+            </div>
+            <div id="d8">
+              ?
+            </div>
+
           </div>
 
-          <!-- 6-Sided Die -->
-          <input type="checkbox" id="doRolld6"> 
-
-          </input>
-          <label for="doRolld6">6-sided Die</label>
-          <div class="invisible">
-            <textarea rows="1" id="d6Output" readonly placeholder="Not rolled"></textarea>
-          </div>
-          <div id="d6">
-            ?
-          </div>
-
-          <!-- 8-Sided Die -->
-          <input type="checkbox" id="doRolld8"> 
-
-          </input>
-          <label for="doRolld8">8-sided Die</label>
-          <div class="invisible">
-            <textarea rows="1" id="d8Output" readonly placeholder="Not rolled"></textarea>
-          </div>
-          <div id="d8">
-            ?
-          </div>
         </div>
 
         <div class="flex-child">
           <!-- 10-Sided Die -->
-          <input type="checkbox" id="doRolld10"> 
+          <div class="slider-container">
+            <label class="switch">
+              <input id="doRolld10" type="checkbox"/>
+              <span class="slider"></span>
+            </label>
+            <label class="slider-label" for="doRolld10">10-sided Die</label>
+          </div>
 
-          </input>
-          <label for="doRolld10">10-sided Die</label>
           <div class="invisible">
             <textarea rows="1" id="d10Output" readonly placeholder="Not rolled"></textarea>
           </div>
@@ -371,10 +504,14 @@
           </div>
 
           <!-- 20-Sided Die -->
-          <input type="checkbox" id="doRolld20"> 
+          <div class="slider-container">
+            <label class="switch">
+              <input id="doRolld20" type="checkbox"/>
+              <span class="slider"></span>
+            </label>
+            <label class="slider-label" for="doRoll20">20-sided Die</label>
+          </div>
 
-          </input>
-          <label for="doRolld20">20-sided Die</label>
           <div class="invisible">
             <textarea rows="1" id="d20Output" readonly placeholder="Not rolled"></textarea>
           </div>
@@ -383,7 +520,7 @@
           </div>
         </div>
 
-        <div class="flex-child">
+        <div class="flex-child output-flex-child">
           <label for="output" id="final-result">Final Result</label>
     
           <div id="output">
@@ -396,9 +533,9 @@
 
       <div class="flex">
         <div style="flex: 2;">
-          <button type="submit">Press to Roll !</button>
+          <button id="roll-button" type="submit">Press to Roll !</button>
         </div>
-        <div style="flex: 1;"></div>
+        <div style="flex: 1; height: 60px; background-color: black;"></div>
       </div>
 
     </form>
