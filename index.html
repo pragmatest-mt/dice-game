@@ -74,6 +74,8 @@
         flex: 1;
         padding-top: 1rem;
         padding-bottom: 1rem;
+        text-align: -moz-center;
+        text-align: -webkit-center;
     }
 
     .flex-child-content {
@@ -237,7 +239,7 @@
       font-family: monospace;
     }
 
-    
+
     @media screen and (min-device-width:700px), screen and (min-width:700px) {
       .glowing-number {
         background-color: #caa607;
@@ -316,6 +318,13 @@
   <script type="module">
     const diceRoller = new window.rpgDiceRoller.DiceRoller();
 
+    document.body.onkeyup = function(e){
+      if(e.keyCode == 32 && document.getElementById('roll-button').disabled == false){
+          window.roll();
+      }
+      return false;
+    }
+
     window.roll = () => {
       
       // Lock roll button
@@ -340,16 +349,17 @@
 
       // Compute d4 result if selected
       var doRolld4 = document.getElementById('doRolld4').checked;
+      var d4 = document.getElementById('d4');
       if (doRolld4) {
         var diceResult = diceRoller.roll('1d4').total;
         results['d4'] = diceResult;
         document.getElementById('d4Output').value = diceResult;
-        document.getElementById('d4').innerText = '...';
+        d4.innerText = '...';
         setTimeout(function() {
-          document.getElementById('d4').innerText = results['d4'];
+          d4.innerText = results['d4'];
         }, 1234);
       }
-
+      
       // Compute d6 result if selected
       var doRolld6 = document.getElementById('doRolld6').checked;
       if (doRolld6) {
@@ -411,7 +421,7 @@
         
         // Unlock roll button
         document.getElementById('roll-button').disabled = false;
-        document.getElementById('roll-button').innerHTML = 'Press to Roll Again !';
+        document.getElementById('roll-button').innerHTML = '🎲 Press to Roll Again 🎲';
 
       }, 1234);
       
@@ -533,7 +543,7 @@
 
       <div class="flex">
         <div style="flex: 2;">
-          <button id="roll-button" type="submit">Press to Roll !</button>
+          <button id="roll-button" type="submit">🎲 Press to Roll 🎲</button>
         </div>
         <div style="flex: 1; height: 60px; background-color: black;"></div>
       </div>
